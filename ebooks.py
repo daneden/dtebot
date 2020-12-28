@@ -3,7 +3,7 @@ import re
 import sys
 import twitter
 import markov
-from htmlentitydefs import name2codepoint as n2c
+from html.entities import name2codepoint as n2c
 from local_settings import *
 
 def connect():
@@ -17,16 +17,16 @@ def entity(text):
     if text[:2] == "&#":
         try:
             if text[:3] == "&#x":
-                return unichr(int(text[3:-1], 16))
+                return chr(int(text[3:-1], 16))
             else:
-                return unichr(int(text[2:-1]))
+                return chr(int(text[2:-1]))
         except ValueError:
             pass
     else:
         guess = text[1:-1]
         numero = n2c[guess]
         try:
-            text = unichr(numero)
+            text = chr(numero)
         except KeyError:
             pass
     return text
@@ -84,7 +84,7 @@ if __name__=="__main__":
                     sys.exit()
         mine = markov.MarkovChainer(order)
         for tweet in source_tweets:
-            if re.search('([\.\!\?\"\']$)', tweet):
+            if re.search(r'([\.\!\?\"\']$)', tweet):
                 pass
             else:
                 tweet+="."
